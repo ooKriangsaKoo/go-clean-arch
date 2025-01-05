@@ -1,0 +1,205 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Swagger Example API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:9090",
+    "basePath": "/v1",
+    "paths": {
+        "/process": {
+            "post": {
+                "description": "Process pdf type [split,compress,editpdf]",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "process"
+                ],
+                "summary": "Process pdf",
+                "parameters": [
+                    {
+                        "description": "Process model",
+                        "name": "Process",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/domain.IlovepdfRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domain.IlovepdfReponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "domain.Element": {
+            "type": "object",
+            "required": [
+                "coordinates",
+                "dimensions",
+                "pages",
+                "type",
+                "zindex"
+            ],
+            "properties": {
+                "coordinates": {
+                    "type": "string"
+                },
+                "dimensions": {
+                    "type": "string"
+                },
+                "font_color": {
+                    "type": "string"
+                },
+                "font_family": {
+                    "type": "string"
+                },
+                "font_size": {
+                    "type": "integer"
+                },
+                "font_style": {
+                    "type": "string"
+                },
+                "letter_spacing": {
+                    "type": "string"
+                },
+                "opacity": {
+                    "type": "string"
+                },
+                "pages": {
+                    "type": "string"
+                },
+                "rotation": {
+                    "type": "string"
+                },
+                "server_filename": {
+                    "description": "Type image, svg",
+                    "type": "string"
+                },
+                "text": {
+                    "description": "Type text",
+                    "type": "string"
+                },
+                "text_align": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "underline_text": {
+                    "type": "string"
+                },
+                "zindex": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.File": {
+            "type": "object",
+            "required": [
+                "filename",
+                "server_filename"
+            ],
+            "properties": {
+                "filename": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "rotate": {
+                    "type": "integer"
+                },
+                "server_filename": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.IlovepdfReponse": {
+            "type": "object",
+            "properties": {
+                "download_filename": {
+                    "type": "string"
+                },
+                "filesize": {
+                    "type": "integer"
+                },
+                "output_extensions": {
+                    "type": "string"
+                },
+                "output_filenumber": {
+                    "type": "integer"
+                },
+                "output_filesize": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "timer": {
+                    "type": "string"
+                }
+            }
+        },
+        "domain.IlovepdfRequest": {
+            "type": "object",
+            "required": [
+                "files",
+                "tool"
+            ],
+            "properties": {
+                "compression_level": {
+                    "description": "compress",
+                    "type": "string"
+                },
+                "elements": {
+                    "description": "Edit",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.Element"
+                    }
+                },
+                "files": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/domain.File"
+                    }
+                },
+                "fixed_range": {
+                    "type": "integer"
+                },
+                "merge_after": {
+                    "type": "boolean"
+                },
+                "ranges": {
+                    "type": "string"
+                },
+                "remove_pages": {
+                    "type": "string"
+                },
+                "split_mode": {
+                    "description": "Split",
+                    "type": "string"
+                },
+                "task": {
+                    "type": "string"
+                },
+                "tool": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

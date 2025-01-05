@@ -1,0 +1,138 @@
+basePath: /v1
+definitions:
+  domain.Element:
+    properties:
+      coordinates:
+        type: string
+      dimensions:
+        type: string
+      font_color:
+        type: string
+      font_family:
+        type: string
+      font_size:
+        type: integer
+      font_style:
+        type: string
+      letter_spacing:
+        type: string
+      opacity:
+        type: string
+      pages:
+        type: string
+      rotation:
+        type: string
+      server_filename:
+        description: Type image, svg
+        type: string
+      text:
+        description: Type text
+        type: string
+      text_align:
+        type: string
+      type:
+        type: string
+      underline_text:
+        type: string
+      zindex:
+        type: string
+    required:
+    - coordinates
+    - dimensions
+    - pages
+    - type
+    - zindex
+    type: object
+  domain.File:
+    properties:
+      filename:
+        type: string
+      password:
+        type: string
+      rotate:
+        type: integer
+      server_filename:
+        type: string
+    required:
+    - filename
+    - server_filename
+    type: object
+  domain.IlovepdfReponse:
+    properties:
+      download_filename:
+        type: string
+      filesize:
+        type: integer
+      output_extensions:
+        type: string
+      output_filenumber:
+        type: integer
+      output_filesize:
+        type: integer
+      status:
+        type: string
+      timer:
+        type: string
+    type: object
+  domain.IlovepdfRequest:
+    properties:
+      compression_level:
+        description: compress
+        type: string
+      elements:
+        description: Edit
+        items:
+          $ref: '#/definitions/domain.Element'
+        type: array
+      files:
+        items:
+          $ref: '#/definitions/domain.File'
+        type: array
+      fixed_range:
+        type: integer
+      merge_after:
+        type: boolean
+      ranges:
+        type: string
+      remove_pages:
+        type: string
+      split_mode:
+        description: Split
+        type: string
+      task:
+        type: string
+      tool:
+        type: string
+    required:
+    - files
+    - tool
+    type: object
+host: localhost:9090
+info:
+  contact: {}
+  title: Swagger Example API
+  version: "1.0"
+paths:
+  /process:
+    post:
+      consumes:
+      - application/json
+      description: Process pdf type [split,compress,editpdf]
+      parameters:
+      - description: Process model
+        in: body
+        name: Process
+        required: true
+        schema:
+          $ref: '#/definitions/domain.IlovepdfRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.IlovepdfReponse'
+      summary: Process pdf
+      tags:
+      - process
+swagger: "2.0"

@@ -11,13 +11,16 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
+	echoSwagger "github.com/swaggo/echo-swagger"
 
+	"github.com/bxcodec/go-clean-arch/ilovepdf"
 	mysqlRepo "github.com/bxcodec/go-clean-arch/internal/repository/mysql"
 
 	"github.com/bxcodec/go-clean-arch/article"
 	"github.com/bxcodec/go-clean-arch/internal/rest"
 	"github.com/bxcodec/go-clean-arch/internal/rest/middleware"
 	"github.com/joho/godotenv"
+	_ "github.com/bxcodec/go-clean-arch/docs"
 )
 
 const (
@@ -32,6 +35,10 @@ func init() {
 	}
 }
 
+// @title Swagger Example API
+// @version 1.0
+// @host            localhost:9090
+// @BasePath        /v1
 func main() {
 	//prepare database
 	dbHost := os.Getenv("DATABASE_HOST")
@@ -71,6 +78,7 @@ func main() {
 	}
 	timeoutContext := time.Duration(timeout) * time.Second
 	e.Use(middleware.SetRequestContextWithTimeout(timeoutContext))
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
 	// Prepare Repository
 	authorRepo := mysqlRepo.NewAuthorRepository(dbConn)
@@ -79,6 +87,9 @@ func main() {
 	// Build service Layer
 	svc := article.NewService(articleRepo, authorRepo)
 	rest.NewArticleHandler(e, svc)
+
+	ilovepdfSVC := ilovepdf.NewService()
+	rest.NewILovePdfHandlerHandler(e, ilovepdfSVC)
 
 	// Start Server
 	address := os.Getenv("SERVER_ADDRESS")
